@@ -1,0 +1,46 @@
+package com.prestrive.blog.util;
+
+import nl.basjes.parse.useragent.UserAgent;
+import nl.basjes.parse.useragent.UserAgentAnalyzer;
+import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.Map;
+
+
+
+@Component
+public class UserAgentUtils {
+
+    private UserAgentAnalyzer uaa;
+
+    public UserAgentUtils() {
+        System.out.println("UserAgentUtils:UserAgentUtils");
+
+        this.uaa = UserAgentAnalyzer
+                .newBuilder()
+                .hideMatcherLoadStats()
+                .withField("OperatingSystemNameVersionMajor")
+                .withField("AgentNameVersion")
+                .build();
+    }
+
+    /**
+     * 从User-Agent解析客户端操作系统和浏览器版本
+     *
+     * @param userAgent
+     * @return
+     */
+    public Map<String, String> parseOsAndBrowser(String userAgent) {
+        System.out.println("UserAgentUtils:parseOsAndBrowser");
+
+        UserAgent agent = uaa.parse(userAgent);
+        String os = agent.getValue("OperatingSystemNameVersionMajor");
+        String browser = agent.getValue("AgentNameVersion");
+        Map<String, String> map = new HashMap<>();
+        map.put("os", os);
+        map.put("browser", browser);
+        return map;
+    }
+
+}
