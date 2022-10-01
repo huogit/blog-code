@@ -5,6 +5,7 @@ import cn.hutool.core.bean.BeanUtil;
 
 import cn.hutool.core.map.MapBuilder;
 import cn.hutool.core.map.MapUtil;
+import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
@@ -14,11 +15,14 @@ import com.prestrive.blog.annotation.VisitLogger;
 import com.prestrive.blog.common.lang.Result;
 import com.prestrive.blog.common.lang.vo.BlogInfo;
 import com.prestrive.blog.config.RedisKeyConfig;
+import com.prestrive.blog.config.RedisManagerConfig;
 import com.prestrive.blog.entity.Blog;
 import com.prestrive.blog.service.BlogService;
 import com.prestrive.blog.service.RedisService;
 import com.prestrive.blog.util.IpAddressUtils;
 import com.prestrive.blog.util.ShiroUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.executor.loader.ResultLoader;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -44,6 +48,7 @@ import java.util.Map;
  * @author fanfanli
  * @date 2021-04-05
  */
+//@Slf4j
 @RestController
 public class BlogController {
     @Autowired
@@ -51,6 +56,9 @@ public class BlogController {
     @Autowired
     RedisService redisService;
     Logger logger = LoggerFactory.getLogger(BlogController.class);
+
+    @Autowired
+    RedisManagerConfig redisManagerConfig;
 
     @GetMapping("test")
     public Result test(HttpServletRequest request){
@@ -63,18 +71,11 @@ public class BlogController {
 
         //获取访问者基本信息
         String ip = request.getHeader("x-forwarded-for");
-        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)){
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)){
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)){
-            ip = request.getRemoteAddr();
-        }
         IpAddressUtils.getCityInfo(ip);
 
-        return Result.succ(request);
+        return Result.succ(ip);
+
+
     }
 
     /**
@@ -370,16 +371,6 @@ public class BlogController {
 
     }
 
-
-//    /**
-//     * 博客浏览次数加一
-//     */
-//    @RequestMapping("/blog/view/{id}")
-//    public Result addView(@PathVariable(name = "id")String id){
-//        Blog blog = blogService.getById(id);
-//        blog.setViews(blog.getViews()+1);
-//        blogService.saveOrUpdate(blog);
-//        return Result.succ(null);
-//    }
+    
 }
 

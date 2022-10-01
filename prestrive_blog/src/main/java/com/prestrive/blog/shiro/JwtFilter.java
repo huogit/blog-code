@@ -105,30 +105,30 @@ public class JwtFilter extends AuthenticatingFilter {
         }
         return false;
     }
-//
-//    /**
-//     * shiro：对跨域提供支持，前置过滤器
-//     */
-//    @Override
-//    protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
-//        System.out.println("JwtFilter:preHandle.....");
-//        //获取请求和响应
-//        HttpServletRequest httpServletRequest = WebUtils.toHttp(request);
-//        HttpServletResponse httpServletResponse = WebUtils.toHttp(response);
-//        //设置响应头部
-//        httpServletResponse.setHeader("Access-control-Allow-Origin", httpServletRequest.getHeader("Origin"));
-//        httpServletResponse.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,PUT,DELETE");
-//        httpServletResponse.setHeader("Access-Control-Allow-Headers", httpServletRequest.getHeader("Access-Control-Request-Headers"));
-//        httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true"); //带上cookie信息
-//        // 跨域时会首先发送一个OPTIONS请求，这里我们给OPTIONS请求直接返回正常状态
-//        if (httpServletRequest.getMethod().equals(RequestMethod.OPTIONS.name())) {
-//            // 进来时就把响应处理成正常状态
-//            httpServletResponse.setStatus(org.springframework.http.HttpStatus.OK.value());
-//            return false;
-//        }
-//        //不是跨域，正常处理
-//        return super.preHandle(request, response);
-//    }
+
+    /**
+     * shiro：对跨域提供支持，前置过滤器
+     */
+    @Override
+    protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
+        System.out.println("JwtFilter:preHandle.....");
+        //获取请求和响应
+        HttpServletRequest httpServletRequest = WebUtils.toHttp(request);
+        HttpServletResponse httpServletResponse = WebUtils.toHttp(response);
+        //设置响应头部
+        httpServletResponse.setHeader("Access-control-Allow-Origin", httpServletRequest.getHeader("Origin"));
+        httpServletResponse.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,PUT,DELETE");
+        httpServletResponse.setHeader("Access-Control-Allow-Headers", httpServletRequest.getHeader("Access-Control-Request-Headers"));
+        httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true"); //带上cookie信息
+        // 跨域时会首先发送一个OPTIONS请求，这里我们给OPTIONS请求直接返回正常状态
+        if (httpServletRequest.getMethod().equals(RequestMethod.OPTIONS.name())) {
+            // 进来时就把响应处理成正常状态
+            httpServletResponse.setStatus(org.springframework.http.HttpStatus.OK.value());
+            return false;
+        }
+        //不是跨域，正常处理
+        return super.preHandle(request, response);
+    }
 
 
 }

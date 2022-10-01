@@ -13,6 +13,7 @@ import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.crazycake.shiro.RedisCacheManager;
+import org.crazycake.shiro.RedisManager;
 import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,9 @@ public class ShiroConfig {
     @Autowired
     JwtFilter jwtFilter;
 
+    @Autowired
+    RedisManagerConfig redisManagerConfig;
+
     /**
      * 会话管理，即用户登录后就是一次会话，在没有退出之前，它的所有信息都在会话中
      * @param redisSessionDAO
@@ -52,18 +56,48 @@ public class ShiroConfig {
         return sessionManager;
     }
 
+
+    /**
+     * 配置shiro 的 redisManager
+     * 使用的是shiro-redis开源插件
+     *
+     * @return
+     */
+    public RedisManager redisManager() {
+        RedisManager redisManager = new RedisManager();
+        // 120.24.200.62:6379
+        redisManager.setHost(redisManagerConfig.getHost() + ":" + redisManagerConfig.getPort());
+        //redisManager.setJedisPool();
+        //redisManager.setExpire(1800);// 配置缓存过期时间
+        redisManager.setTimeout(redisManagerConfig.getTimeout());
+        redisManager.setPassword(redisManagerConfig.getPassword());
+        return redisManager;
+    }
+
+    /**
+     * cacheManager 缓存 redis实现
+     * 使用的是shiro-redis开源插件
+     *
+     * @return
+     */
+    public RedisCacheManager redisCacheManager() {
+        RedisCacheManager redisCacheManager = new RedisCacheManager();
+        redisCacheManager.setRedisManager(redisManager());
+        return redisCacheManager;
+    }
+
     /**
      * 创建安全管理器:
      * 配置原理：对SecurityManager来说他管理了所有的Realm，通过这些代码获取了Realm管理信息
      * @param accountRealm
      * @param sessionManager
-     * @param redisCacheManager
+     *
      * @return
      */
     @Bean
     public DefaultWebSecurityManager securityManager(AccountRealm accountRealm,
-                                                     SessionManager sessionManager,
-                                                     RedisCacheManager redisCacheManager) {
+                                                     SessionManager sessionManager
+                                                     ) {
         System.out.println("ShiroConfig:securityManager");
 
         //RedisCacheManager 
@@ -80,9 +114,8 @@ public class ShiroConfig {
         subjectDAO.setSessionStorageEvaluator(defaultSessionStorageEvaluator);
         securityManager.setSubjectDAO(subjectDAO);
 
-
         // inject redisCacheManager
-        securityManager.setCacheManager(redisCacheManager);
+        securityManager.setCacheManager(redisCacheManager());
         return securityManager;
     }
 

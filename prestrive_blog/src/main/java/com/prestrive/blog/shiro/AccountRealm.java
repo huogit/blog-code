@@ -70,7 +70,7 @@ public class AccountRealm extends AuthorizingRealm {
             //添加权限
             if(role.equals("role_root")){
                 info.addStringPermission("user:create");
-                //info.addStringPermission("user:update");
+                info.addStringPermission("user:update");
                 info.addStringPermission("user:read");
                 info.addStringPermission("user:delete");
             }

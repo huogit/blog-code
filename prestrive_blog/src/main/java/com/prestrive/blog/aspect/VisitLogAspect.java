@@ -188,9 +188,6 @@ public class VisitLogAspect {
         return map;
     }
 
-
-
-
     /**
      * 校验访客标识码
      *

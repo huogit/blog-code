@@ -15,6 +15,8 @@
     <groupId>org.example</groupId>
     <artifactId>prestrive_blog</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <!--指定打包类型-->
+    <packaging>jar</packaging>
     <properties>
         <java.version>1.8</java.version>
     </properties>
@@ -142,6 +144,7 @@
     </dependencies>
     <build>
         <plugins>
+            <!--maven打包插件-->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -154,6 +157,7 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <!--maven-surefire-plugin：一个用于mvn 生命周期的测试阶段的插件-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>

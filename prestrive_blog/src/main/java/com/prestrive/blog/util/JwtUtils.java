@@ -1,5 +1,6 @@
 package com.prestrive.blog.util;
 
+import cn.hutool.crypto.SecureUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -24,6 +25,8 @@ public class JwtUtils {
     private String secret;
     private long expire;
     private String header;
+
+    private static String key = "l0UsM01W/W3s+o4o/j+DIdiK1uo+4CJ46blUXwg9Fis=";
 
     /**
      * 生成 JWT Token 字符串
@@ -81,5 +84,13 @@ public class JwtUtils {
     public boolean isTokenExpired(Date expiration) {
         System.out.println("JwtUtils:isTokenExpired.....");
         return expiration.before(new Date());
+    }
+
+    public static void main(String[] args) {
+
+        String md5 = SecureUtil.md5("author:lzh");
+
+        System.out.println(md5);
+
     }
 }
