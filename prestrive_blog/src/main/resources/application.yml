@@ -5,13 +5,13 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     # 部署到线上要 把ip地址 改成 远程服务器的ip ，用localhost不行
-    url: jdbc:mysql://120.24.200.62:3306/vueblog?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=UTC
+    url: jdbc:mysql://ip:3306/vueblog?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=UTC
     username: vueblog
     # mysql 密码的加密规则 必须是 mysql_native_password
-    password: wyzxgzsLZH1
+    password: 密码
   redis:
     # 部署到线上要 把ip地址 改成 远程服务器的ip ，用localhost不行
-      host: 120.24.200.62
+      host: ip
       timeout: 5000
       port: 6379
       jedis:
@@ -20,11 +20,11 @@ spring:
           min-idle: 0
           max-wait: -1
           max-active: 8
-      password: wyzxgzsLZH1
+      password: 密码
   mail:
       host:  smtp.163.com
-      username: xzxxuenai@163.com
-      password: MAOMZOBVBNHRVQBM
+      username: 163邮箱@163.com
+      password: 密码
       default-encoding: UTF-8
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**Mapper.xml
@@ -37,7 +37,7 @@ fanli:
   jwt:
     # 部署上线务必修改此配置，以保证token的安全性
     #安全密钥
-    secret: a43bd0b5372e21acbb6aa8dedbd38664
+    secret:
     #过期时间
     expire: 172800
     # 头部
